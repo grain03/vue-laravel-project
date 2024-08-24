@@ -1,11 +1,13 @@
 <template>
-  <form @submit.prevent="handleForm">
-    <TextInput @disableButton="disableButton" v-model="formData.postContent" :errorMessage="config.errorMessage" inputName="postContent"  inputLabel="Write what's on your mind"/>
-    <AppButton :error="buttonConfig.buttonError" :success="buttonConfig.buttonSuccess" :loading="buttonConfig.buttonLoading" :disabled="buttonConfig.isDisabled" >{{ buttonConfig.buttonInnerText }}</AppButton>
-  </form>
-  <transition name="fade">
-    <Success v-if="config.successMessage" :successMessage="config.successMessage" @close="handleCloseSuccessMessage"/>
-  </transition>
+  <div>
+    <form @submit.prevent="handleForm">
+      <TextInput @disableButton="disableButton" v-model="formData.postContent" :errorMessage="config.errorMessage" inputName="postContent"  inputLabel="Write what's on your mind"/>
+      <AppButton :error="buttonConfig.buttonError" :success="buttonConfig.buttonSuccess" :loading="buttonConfig.buttonLoading" :disabled="buttonConfig.isDisabled" >{{ buttonConfig.buttonInnerText }}</AppButton>
+    </form>
+    <transition name="fade">
+      <Success v-if="config.successMessage" :successMessage="config.successMessage" @close="handleCloseSuccessMessage"/>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -31,7 +33,7 @@ export default {
         apiURL: '',
       },
       buttonConfig: {
-        isDisabled: true,
+        isDisabled: false,
         buttonLoading: false,
         buttonSuccess: false,
         buttonError: false,
@@ -87,11 +89,13 @@ export default {
       this.buttonConfig.isDisabled = status
     },
     async handleForm(){
-      this.disableButton(false)
+      this.disableButton(true)
       this.config.successMessage = ''
       this.config.errorMessage = ''
       this.buttonConfig.buttonLoading = true
       const token = localStorage.getItem('token');
+      
+      console.log(this.formData);
       
       try {
         if (this.formType == 'Edit') {          
